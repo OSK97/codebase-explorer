@@ -1,17 +1,12 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn
-} from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity('users')
-export class user {
+export class User {
     @PrimaryGeneratedColumn('uuid')
-    id!: string
+    id!: string;     //value will be initialized later
 
     @Column({ unique: true })
-    email!: string
+    email!: string;
 
     @CreateDateColumn()
     createdAt!: Date;
