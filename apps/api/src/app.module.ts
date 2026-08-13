@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './users/user.entity';
-import { Repository } from './repositories/repository.entity'
+import { RepositoryEntity } from './repositories/repository.entity'
 import { RepositoriesModule } from './repositories/repositories.module';
 
 @Module({
@@ -17,7 +17,7 @@ import { RepositoriesModule } from './repositories/repositories.module';
       database: 'ai_codebase_explorer',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User, Repository],
+      entities: [User, RepositoryEntity],
     }),
     RepositoriesModule,
   ],
