@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { User } from './users/user.entity';
 import { RepositoryEntity } from './repositories/repository.entity'
 import { RepositoriesModule } from './repositories/repositories.module';
+import { GitService } from './git/git.service';
+import { GitModule } from './git/git.module';
 
 @Module({
   imports: [
@@ -20,8 +22,9 @@ import { RepositoriesModule } from './repositories/repositories.module';
       entities: [User, RepositoryEntity],
     }),
     RepositoriesModule,
+    GitModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GitService],
 })
 export class AppModule { }
