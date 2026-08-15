@@ -18,6 +18,10 @@ export class RepositoriesController {
         return this.repositoriesService.findOne(id);
     }
 
+    @Get(':id/scan')
+    scan(@Param('id') id: string) {
+        return this.repositoriesService.scan(id);
+    }
 
     @Post()
     create(@Body() dto: CreateRepositoryDto) {

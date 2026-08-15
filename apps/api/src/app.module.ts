@@ -7,6 +7,7 @@ import { RepositoryEntity } from './repositories/repository.entity'
 import { RepositoriesModule } from './repositories/repositories.module';
 import { GitService } from './git/git.service';
 import { GitModule } from './git/git.module';
+import { ScannerModule } from './scanner/scanner.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { GitModule } from './git/git.module';
     }),
     RepositoriesModule,
     GitModule,
+    ScannerModule,
   ],
   controllers: [AppController],
   providers: [AppService, GitService],
