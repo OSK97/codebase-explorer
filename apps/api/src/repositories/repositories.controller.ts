@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Param } from '@nestjs/common';
 import { RepositoriesService } from './repositories.service';
 import { CreateRepositoryDto } from './create-repository.dto';
+import { log } from 'console';
 
-@Controller('repositories')
+@Controller('repositories')             //endpoints after localhost:3000/repositories
 export class RepositoriesController {
     constructor(
         private readonly repositoriesService: RepositoriesService,
@@ -13,7 +14,7 @@ export class RepositoriesController {
         return this.repositoriesService.findAll();
     }
 
-    @Get(':id')
+    @Get(':id')                             //dynamic url
     findone(@Param('id') id: string) {
         return this.repositoriesService.findOne(id);
     }
@@ -29,5 +30,10 @@ export class RepositoriesController {
             dto.name,
             dto.githubUrl,
         );
+    }
+
+    @Post(':id/index')
+    index(@Param('id') id: string) {
+        return this.repositoriesService.indexRepository(id);
     }
 }   

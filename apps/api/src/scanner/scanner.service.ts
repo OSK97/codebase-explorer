@@ -4,6 +4,10 @@ import * as path from 'path';
 
 @Injectable()
 export class ScannerService {
+    private readonly allowedExtensions = [
+        '.ts', '.tsx', '.js', '.jsx', '.json', '.md', '.html', '.css', '.py',
+    ];
+
     async scanDirectory(rootPath: string) {
         const files: string[] = [];
 
@@ -34,12 +38,20 @@ export class ScannerService {
                     walk(fullPath);
                 }
                 else {
-                    files.push(path.relative(rootPath, fullPath),);
+                    const extension = path.extname(entry.name);         //add only allowed extension
+
+                    if (this.allowedExtensions.includes(extension)) {
+                        files.push(path.relative(rootPath, fullPath),);
+                    }
                 }
             }
         };
 
         walk(rootPath);
         return files;
+    }
+
+    readFileContent(filePath: string) {
+        return fs.readFileSync(filePath, 'utf-8');
     }
 }

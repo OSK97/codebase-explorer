@@ -5,6 +5,8 @@ import { RepositoryEntity } from './repository.entity';
 import { GitService } from '../git/git.service';
 import * as path from 'path';
 import { ScannerService } from '../scanner/scanner.service';
+import { FilesService } from '../files/files.service';
+
 @Injectable()
 export class RepositoriesService {
     constructor(
@@ -12,6 +14,7 @@ export class RepositoriesService {
         private readonly repositoryRepo: Repository<RepositoryEntity>,
         private readonly gitService: GitService,
         private readonly scannerService: ScannerService,
+        private readonly filesService: FilesService,
     ) { }
 
     async findAll() {
@@ -56,14 +59,34 @@ export class RepositoriesService {
         }
 
         const repoPath = path.join(
-            process.cwd(),
-            '..',
-            '..',
-            'storage',
-            'repositories',
-            repo.id,
+            process.cwd(), '..', '..', 'storage', 'repositories', repo.id,
         );
 
         return this.scannerService.scanDirectory(repoPath);
+    }
+
+    async indexRepository(id: string) {
+        const repo = await this.findOne(id);
+
+        if (!repo) {
+            throw new Error('Repository not found');
+        }
+
+        const repoPath = path.join(
+            process.cwd(), '..', '..', 'storage', 'repositories', repo.id,
+        );
+
+        const files = await this.scannerService.scanDirectory(repoPath);
+
+        for (const filePath of files) {
+            const fullPath = path.join(repoPath, filePath);
+
+            const content = this.scannerService.readFileContent(fullPath);
+
+            const size = Buffer.byteLength(content);
+
+            await this.filesService.create(repo.id, filePath, content, size, 'unknown');
+        }
+        return { files: files.length };
     }
 }

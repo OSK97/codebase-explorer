@@ -6,12 +6,14 @@ import { RepositoriesService } from './repositories.service';
 import { RepositoriesController } from './repositories.controller';
 import { GitModule } from '../git/git.module';
 import { ScannerModule } from '../scanner/scanner.module';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RepositoryEntity]),
     GitModule,
     ScannerModule,
+    FilesModule,
   ],
   controllers: [RepositoriesController],
   providers: [RepositoriesService],

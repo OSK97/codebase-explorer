@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
-@Entity('users')
-export class User {
+@Entity('users')        //to store user info
+export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;     //value will be initialized later
 
