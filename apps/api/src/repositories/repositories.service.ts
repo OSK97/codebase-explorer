@@ -6,15 +6,19 @@ import { GitService } from '../git/git.service';
 import * as path from 'path';
 import { ScannerService } from '../scanner/scanner.service';
 import { FilesService } from '../files/files.service';
+import { ChunksService } from '../chunks/chunks.service';
+import { EmbeddingsService } from '../embeddings/embeddings.service';
 
 @Injectable()
 export class RepositoriesService {
     constructor(
-        @InjectRepository(RepositoryEntity)
-        private readonly repositoryRepo: Repository<RepositoryEntity>,
+        @InjectRepository(RepositoryEntity)         //db needed at runtime for ts
+        private readonly repositoryRepo: Repository<RepositoryEntity>,          //Repsoitory<> to provide db commands  
         private readonly gitService: GitService,
         private readonly scannerService: ScannerService,
         private readonly filesService: FilesService,
+        private readonly chunksService: ChunksService,
+        private readonly embeddingsService: EmbeddingsService,
     ) { }
 
     async findAll() {
@@ -29,17 +33,10 @@ export class RepositoriesService {
 
         const savedRepo = await this.repositoryRepo.save(repo);
         const targetPath = path.join(
-            process.cwd(),
-            '..',
-            '..',
-            'storage',
-            'repositories',
-            savedRepo.id,
-        );
-        await this.gitService.cloneRepository(
-            savedRepo.githubUrl,
-            targetPath,
-        );
+            process.cwd(), '..', '..', 'storage', 'repositories', savedRepo.id);
+
+        await this.gitService.cloneRepository(savedRepo.githubUrl, targetPath);
+
         savedRepo.status = 'cloned';
 
         await this.repositoryRepo.save(savedRepo);
@@ -78,14 +75,34 @@ export class RepositoriesService {
 
         const files = await this.scannerService.scanDirectory(repoPath);
 
+        const existingFiles =                                //guard condition to not generate copies of emneddings
+            await this.filesService.countByRepository(repo.id);
+
+        if (existingFiles > 0) {
+            return { message: 'Repository Already Exists' };
+        }
+
         for (const filePath of files) {
+
+
             const fullPath = path.join(repoPath, filePath);
 
             const content = this.scannerService.readFileContent(fullPath);
 
             const size = Buffer.byteLength(content);
 
-            await this.filesService.create(repo.id, filePath, content, size, 'unknown');
+            const savedFile = await this.filesService.create(repo.id, filePath, content, size, 'unknown');
+
+            const chunks = this.chunksService.splitContent(content);
+
+            for (let i = 0; i < chunks.length; ++i) {
+
+                const savedChunk = await this.chunksService.create(savedFile.id, i, chunks[i]);
+
+                const vector = await this.embeddingsService.generateEmbedding(chunks[i]);
+
+                await this.embeddingsService.create(savedChunk.id, vector);
+            }
         }
         return { files: files.length };
     }

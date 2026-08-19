@@ -15,4 +15,10 @@ export class FilesService {
         });
         return this.fileRepo.save(file);
     }
+
+    async countByRepository(repositoryId: string) {
+        return this.fileRepo.count({
+            where: { repositoryId }
+        });
+    }
 }

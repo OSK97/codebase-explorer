@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Post, Param } from '@nestjs/common';
 import { RepositoriesService } from './repositories.service';
 import { CreateRepositoryDto } from './create-repository.dto';
-import { log } from 'console';
-
 @Controller('repositories')             //endpoints after localhost:3000/repositories
 export class RepositoriesController {
     constructor(

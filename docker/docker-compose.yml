@@ -1,10 +1,10 @@
 services:
   postgres:
-    image: postgres:17
+    image: pgvector/pgvector:pg17
     container_name: ai-codebase-postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: osk
+      POSTGRES_PASSWORD: osk
       POSTGRES_DB: ai_codebase_explorer
     ports:
       - "5432:5432"
