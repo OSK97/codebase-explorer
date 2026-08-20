@@ -17,6 +17,8 @@ import { EmbeddingsModule } from './embeddings/embeddings.module';
 import { ChunkEntity } from './chunks/entities/chunk.entity';
 import { EmbeddingEntity } from './embeddings/embeddings.entity';
 import { SearchModule } from './search/search.module';
+import { AiModule } from './ai/ai.module';
+import { SummaryModule } from './summary/summary.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -46,6 +48,8 @@ import { SearchModule } from './search/search.module';
     ChunksModule,
     EmbeddingsModule,
     SearchModule,
+    AiModule,
+    SummaryModule,
   ],
   controllers: [AppController],
   providers: [AppService, GitService],

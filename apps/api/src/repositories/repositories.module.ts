@@ -9,6 +9,8 @@ import { ScannerModule } from '../scanner/scanner.module';
 import { FilesModule } from '../files/files.module';
 import { ChunksModule } from '../chunks/chunks.module';
 import { EmbeddingsModule } from '../embeddings/embeddings.module';
+import { SearchModule } from '../search/search.module';
+import { SummaryModule } from '../summary/summary.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([RepositoryEntity]),
@@ -17,6 +19,8 @@ import { EmbeddingsModule } from '../embeddings/embeddings.module';
     FilesModule,
     ChunksModule,
     EmbeddingsModule,
+    SearchModule,
+    SummaryModule
   ],
   controllers: [RepositoriesController],
   providers: [RepositoriesService],

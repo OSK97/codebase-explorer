@@ -21,11 +21,11 @@ export class RepositoriesService {
         private readonly embeddingsService: EmbeddingsService,
     ) { }
 
-    async findAll() {
+    async findAll() {           //give all repositories stored.
         return this.repositoryRepo.find();
     }
 
-    async create(name: string, githubUrl: string) {
+    async create(name: string, githubUrl: string) {         //clones repo locally
         const repo = this.repositoryRepo.create({
             name,
             githubUrl,
@@ -44,11 +44,11 @@ export class RepositoriesService {
         return savedRepo;
     }
 
-    async findOne(id: string) {    //find repo by its id
+    async findOne(id: string) {                                  //find repo by its id
         return this.repositoryRepo.findOne({ where: { id }, });
     }
 
-    async scan(id: string) {
+    async scan(id: string) {                                 //get all files except some ignorable files
         const repo = await this.findOne(id);
 
         if (!repo) {
@@ -62,7 +62,7 @@ export class RepositoriesService {
         return this.scannerService.scanDirectory(repoPath);
     }
 
-    async indexRepository(id: string) {
+    async indexRepository(id: string) {                       //chunking process of files
         const repo = await this.findOne(id);
 
         if (!repo) {

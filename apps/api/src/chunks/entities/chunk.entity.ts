@@ -5,7 +5,7 @@ export class ChunkEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column()
+    @Column('uuid')
     fileId!: string;
 
     @Column()

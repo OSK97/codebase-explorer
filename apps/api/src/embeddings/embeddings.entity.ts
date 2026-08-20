@@ -5,7 +5,7 @@ export class EmbeddingEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column()
+    @Column('uuid')
     chunkId!: string;
 
     @Column({
